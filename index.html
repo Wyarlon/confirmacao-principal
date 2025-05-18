@@ -5,115 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compra Confirmada - R$39,90</title>
     
-    <!-- Camada de Dados para GTM -->
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-            event: "purchase_main",  // Nome do evento alterado
-            Value: 39.90,            // Valor atualizado
-            Currency: "BRL",
-            content_ids: ['main_offer'],  // IDs atualizados
-            content_type: 'product',
-            fbclid: new URLSearchParams(location.search).get('fbclid') || '',
-            offer_type: 'main'  // Novo parâmetro para diferenciação
-        });
-    </script>
-
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){
         w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-        var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+        var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
         j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
         f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-K3SZTP8L');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- Facebook Pixel Configuração Atualizada -->
+    <!-- Google Analytics com Debug Forçado -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9W9CLWXYRG"></script>
     <script>
-        // 1. INICIALIZAÇÃO DO PIXEL
-        if(!window._pixelInitDone) {
-            window._pixelInitDone = true;
-            
-            !function(f,b,e,v,n,t,s){
-                if(f.fbq)return;
-                n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                n.queue=[];t=b.createElement(e);t.async=!0;
-                t.src=v;s=b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t,s)
-            }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            
-            fbq('init', '1345211853386206');
-            fbq('track', 'PageView');
-        }
-
-        // 2. FUNÇÃO DE COMPRA ATUALIZADA
-        function trackPurchase() {
-            const isDebug = new URLSearchParams(location.search).has('debug');
-            const fbclid = new URLSearchParams(location.search).get('fbclid') || '';
-            
-            // Dados atualizados para oferta principal
-            const eventData = {
-                value: 39.90,              // Valor principal
-                currency: 'BRL',
-                content_ids: ['main_offer'],  // IDs da oferta principal
-                content_type: 'product',
-                fbclid: fbclid,
-                fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || '',
-                fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || '',
-                offer_type: 'main'  // Parâmetro adicional
-            };
-
-            // Disparo dos eventos
-            fbq('track', 'Purchase', eventData);
-            
-            // Atualização do dataLayer
-            window.dataLayer = window.dataLayer || [];
-            dataLayer.push({
-                'event': 'purchase_main',  // Evento diferente
-                ...eventData
-            });
-
-            // Debug aprimorado
-            if(isDebug) {
-                console.log('✅ Rastreamento da oferta principal concluído', {
-                    'FBClID': fbclid || 'Não encontrado',
-                    'Valor': eventData.value,
-                    'Tipo de Oferta': eventData.offer_type,
-                    'Dados Enviados': eventData
-                });
-            }
-        }
-
-        // Disparo seguro
-        if(document.readyState === 'complete') {
-            trackPurchase();
-        } else {
-            window.addEventListener('DOMContentLoaded', trackPurchase);
-        }
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      gtag('config', 'G-9W9CLWXYRG', {
+        debug_mode: true,
+        send_page_view: false
+      });
     </script>
-    <noscript>
-        <img height="1" width="1" style="display:none" 
-             src="https://www.facebook.com/tr?id=1345211853386206&ev=Purchase&noscript=1"/>
-    </noscript>
+
+    <style>
+        .debug-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f8f9fa;
+            padding: 15px;
+            z-index: 9999;
+            font-family: Arial;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .debug-btn.red {
+            background: #ea4335;
+        }
+        .debug-btn.green {
+            background: #34a853;
+        }
+    </style>
 </head>
-<body style="font-family: Arial; text-align: center; padding: 50px; background: #f5f5f5;">
+<body style="font-family: Arial; text-align: center; padding-top: 100px; background: #f5f5f5;">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3SZTP8L"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     
+    <!-- Painel de Debug -->
+    <div class="debug-panel">
+        <h3 style="margin:0 0 10px 0;color:#4285f4;">PAINEL DE DEBUG - MODO DESENVOLVEDOR</h3>
+        <button class="debug-btn" onclick="window.location.reload()">Recarregar Página</button>
+        <button class="debug-btn green" onclick="simularRedirecionamento()">Simular Redirecionamento (5s)</button>
+        <button class="debug-btn red" onclick="limparLocalStorage()">Limpar LocalStorage</button>
+        <span id="debug-status" style="margin-left:15px;font-weight:bold;color:#4285f4;"></span>
+    </div>
+
     <h1>✅ Compra confirmada!</h1>
     <p>Obrigado por adquirir nossa oferta principal por <strong>R$39,90</strong>.</p>
-    <p>Aguarde, você será redirecionado...</p>
+    <p id="redirect-message">Você será redirecionado automaticamente em <span id="countdown">5</span> segundos...</p>
     
+    <div style="margin:30px auto;max-width:600px;text-align:left;padding:20px;background:white;border:1px solid #eee;">
+        <h3>📊 Dados do Evento Capturados:</h3>
+        <pre id="debug-output" style="background:#f5f5f5;padding:10px;overflow:auto;"></pre>
+    </div>
+
+    <!-- Facebook Pixel -->
     <script>
-        // REDIRECIONAMENTO
-        if(!new URLSearchParams(location.search).has('debug')) {
-            setTimeout(() => {
-                window.location.href = "https://compra-confirmada.my.canva.site";
-            }, 5000);
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1345211853386206');
+    fbq('track', 'PageView');
+    </script>
+
+    <script>
+        // Variáveis de controle
+        let debugMode = true;
+        let redirectTimer;
+        let countdown = 5;
+
+        // Elementos DOM
+        const countdownEl = document.getElementById('countdown');
+        const redirectMessageEl = document.getElementById('redirect-message');
+        const debugOutputEl = document.getElementById('debug-output');
+        const debugStatusEl = document.getElementById('debug-status');
+
+        // Função para simular redirecionamento
+        function simularRedirecionamento() {
+            debugStatusEl.textContent = "Redirecionando em 5s...";
+            startCountdown();
         }
+
+        // Função para iniciar contagem regressiva
+        function startCountdown() {
+            clearInterval(redirectTimer);
+            countdown = 5;
+            redirectTimer = setInterval(() => {
+                countdown--;
+                countdownEl.textContent = countdown;
+                if(countdown <= 0) {
+                    clearInterval(redirectTimer);
+                    window.location.href = "https://compra-confirmada.my.canva.site";
+                }
+            }, 1000);
+        }
+
+        // Função para limpar localStorage
+        function limparLocalStorage() {
+            localStorage.removeItem('ultimo_fbclid');
+            localStorage.removeItem('client_whatsapp');
+            debugStatusEl.textContent = "LocalStorage limpo com sucesso!";
+            setTimeout(() => { debugStatusEl.textContent = ""; }, 3000);
+            loadDebugData();
+        }
+
+        // Função para mostrar dados de debug
+        function loadDebugData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fbclidDaURL = urlParams.get('fbclid');
+            
+            // Atualiza localStorage se tiver fbclid na URL
+            if (fbclidDaURL) {
+                localStorage.setItem('ultimo_fbclid', fbclidDaURL);
+            }
+            
+            const currentFbclid = fbclidDaURL || localStorage.getItem('ultimo_fbclid') || 'Não capturado';
+
+            const debugData = {
+                fbclid: currentFbclid,
+                whatsapp_number: urlParams.get('whatsapp_number') || localStorage.getItem('client_whatsapp') || 'Não capturado',
+                value: 39.90, // Valor da oferta principal
+                currency: 'BRL',
+                offer_type: 'main', // Identificador da oferta principal
+                debug_mode: debugMode,
+                timestamp: new Date().toISOString()
+            };
+
+            debugOutputEl.textContent = JSON.stringify(debugData, null, 2);
+            
+            // Envia para dataLayer (GA4/GTM)
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                event: 'purchase_completed', // Mesmo nome de evento do downsell
+                client_data: debugData
+            });
+
+            // Dispara Facebook Pixel
+            fbq('track', 'Purchase', {
+                value: 39.90,
+                currency: 'BRL',
+                content_ids: ['main_offer'],
+                content_type: 'product',
+                fbclid: currentFbclid,
+                offer_type: 'main'
+            });
+
+            console.log('📢 Evento purchase_completed (main) disparado:', debugData);
+        }
+
+        // Inicialização
+        if(debugMode) {
+            redirectMessageEl.style.display = 'none';
+            debugStatusEl.textContent = "Modo Debug Ativo - Redirecionamento desabilitado";
+        } else {
+            startCountdown();
+        }
+
+        // Carrega os dados iniciais
+        loadDebugData();
     </script>
 </body>
 </html>
