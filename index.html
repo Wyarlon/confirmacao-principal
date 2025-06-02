@@ -7,7 +7,8 @@
     
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){
-        w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+        w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
         j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
@@ -15,38 +16,23 @@
     })(window,document,'script','dataLayer','GTM-K3SZTP8L');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- Google Analytics com Debug Forçado -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9W9CLWXYRG"></script>
+    <!-- Facebook Pixel Base Code -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      
-      gtag('config', 'G-6RE7JZR8RH', {
-        debug_mode: true,
-        send_page_view: false
-      });
-    </script>
-
-    <!-- Facebook Pixel Code (movido para o head) -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {
-        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)
-      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1345211853386206');
-      fbq('track', 'PageView');
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1345211853386206');
+    fbq('track', 'PageView');
     </script>
     <noscript>
-      <img height="1" width="1" style="display:none" 
-           src="https://www.facebook.com/tr?id=1345211853386206&ev=PageView&noscript=1"/>
+     <img height="1" width="1" style="display:none" 
+          src="https://www.facebook.com/tr?id=1345211853386206&ev=PageView&noscript=1"/>
     </noscript>
-    <!-- End Facebook Pixel Code -->
 
     <style>
         .debug-panel {
@@ -60,6 +46,7 @@
             font-family: Arial;
             border-bottom: 1px solid #ddd;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
         }
         .debug-btn {
             padding: 8px 15px;
@@ -70,132 +57,143 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .debug-btn.red {
-            background: #ea4335;
-        }
-        .debug-btn.green {
-            background: #34a853;
+        .debug-data {
+            display: none;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: left;
+            padding: 20px;
+            background: white;
+            border: 1px solid #eee;
         }
     </style>
 </head>
-<body style="font-family: Arial; text-align: center; padding-top: 100px; background: #f5f5f5;">
+<body style="font-family: Arial; text-align: center; padding-top: 100px;">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3SZTP8L"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    
+
     <!-- Painel de Debug -->
-    <div class="debug-panel">
-        <h3 style="margin:0 0 10px 0;color:#4285f4;">PAINEL DE DEBUG - MODO DESENVOLVEDOR</h3>
-        <button class="debug-btn" onclick="window.location.reload()">Recarregar Página</button>
-        <button class="debug-btn green" onclick="simularRedirecionamento()">Simular Redirecionamento (5s)</button>
-        <button class="debug-btn red" onclick="limparLocalStorage()">Limpar LocalStorage</button>
+    <div class="debug-panel" id="debugPanel">
+        <h3 style="margin:0 0 10px 0;color:#4285f4;">PAINEL DE DEBUG</h3>
+        <button class="debug-btn" onclick="window.location.reload()">Recarregar</button>
+        <button class="debug-btn" style="background:#34a853" onclick="simularRedirecionamento()">Simular Redirecionamento</button>
+        <button class="debug-btn" style="background:#ea4335" onclick="limparLocalStorage()">Limpar Dados</button>
         <span id="debug-status" style="margin-left:15px;font-weight:bold;color:#4285f4;"></span>
     </div>
 
     <h1>✅ Compra confirmada!</h1>
     <p>Obrigado por adquirir nossa oferta principal por <strong>R$39,90</strong>.</p>
-    <p id="redirect-message">Você será redirecionado automaticamente em <span id="countdown">5</span> segundos...</p>
+    <p>Você será redirecionado em <span id="countdown">5</span> segundos...</p>
     
-    <div style="margin:30px auto;max-width:600px;text-align:left;padding:20px;background:white;border:1px solid #eee;">
-        <h3>📊 Dados do Evento Capturados:</h3>
-        <pre id="debug-output" style="background:#f5f5f5;padding:10px;overflow:auto;"></pre>
+    <!-- Área de Debug -->
+    <div class="debug-data" id="debugData">
+        <h3>📊 Dados do Evento:</h3>
+        <pre id="debug-output"></pre>
     </div>
 
     <script>
-        // Variáveis de controle
-        let debugMode = true;
-        let redirectTimer;
-        let countdown = 5;
-
+        // Verifica modo debug
+        const urlParams = new URLSearchParams(window.location.search);
+        const debugMode = urlParams.has('debug');
+        
         // Elementos DOM
         const countdownEl = document.getElementById('countdown');
-        const redirectMessageEl = document.getElementById('redirect-message');
         const debugOutputEl = document.getElementById('debug-output');
+        const debugPanelEl = document.getElementById('debugPanel');
+        const debugDataEl = document.getElementById('debugData');
         const debugStatusEl = document.getElementById('debug-status');
 
-        // Função para simular redirecionamento
-        function simularRedirecionamento() {
-            debugStatusEl.textContent = "Redirecionando em 5s...";
-            startCountdown();
+        // Configura debug se necessário
+        if(debugMode) {
+            debugPanelEl.style.display = 'block';
+            debugDataEl.style.display = 'block';
+            debugStatusEl.innerHTML = 'Modo Debug Ativo - Redirecionamento desativado';
         }
 
-        // Função para iniciar contagem regressiva
+        // Coleta dados da compra
+        function getPurchaseData() {
+            const fbclid = urlParams.get('fbclid') || localStorage.getItem('fbclid') || '';
+            const whatsapp = urlParams.get('whatsapp') || localStorage.getItem('whatsapp') || '';
+            
+            return {
+                value: 39.90, // Valor principal alterado para R$39,90
+                currency: 'BRL',
+                content_ids: ['main_offer'], // ID da oferta principal
+                content_type: 'product',
+                fbclid: fbclid,
+                whatsapp: whatsapp,
+                offer_type: 'main', // Tipo de oferta principal
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Dispara eventos de tracking
+        function fireTrackingEvents() {
+            const purchaseData = getPurchaseData();
+            
+            // Facebook Pixel
+            fbq('track', 'Purchase', {
+                value: purchaseData.value,
+                currency: purchaseData.currency,
+                content_ids: purchaseData.content_ids,
+                content_type: purchaseData.content_type,
+                fbclid: purchaseData.fbclid
+            });
+            
+            // DataLayer para GTM/GA4
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                event: 'purchase_completed',
+                ...purchaseData
+            });
+
+            // Exibe dados no debug
+            if(debugMode) {
+                debugOutputEl.textContent = JSON.stringify({
+                    facebook_event: 'Purchase',
+                    ...purchaseData
+                }, null, 2);
+                
+                console.log('Facebook Pixel Purchase Event:', {
+                    value: purchaseData.value,
+                    currency: purchaseData.currency,
+                    content_ids: purchaseData.content_ids,
+                    fbclid: purchaseData.fbclid
+                });
+            }
+        }
+
+        // Redirecionamento automático
         function startCountdown() {
-            clearInterval(redirectTimer);
-            countdown = 5;
-            redirectTimer = setInterval(() => {
-                countdown--;
-                countdownEl.textContent = countdown;
-                if(countdown <= 0) {
-                    clearInterval(redirectTimer);
-                    window.location.href = "https://compra-confirmada.my.canva.site";
+            let seconds = 5;
+            const timer = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = seconds;
+                if(seconds <= 0) {
+                    clearInterval(timer);
+                    if(!debugMode) {
+                        window.location.href = "https://compra-confirmada.my.canva.site";
+                    }
                 }
             }, 1000);
         }
 
-        // Função para limpar localStorage
-        function limparLocalStorage() {
-            localStorage.removeItem('ultimo_fbclid');
-            localStorage.removeItem('client_whatsapp');
-            debugStatusEl.textContent = "LocalStorage limpo com sucesso!";
-            setTimeout(() => { debugStatusEl.textContent = ""; }, 3000);
-            loadDebugData();
-        }
-
-        // Função para mostrar dados de debug
-        function loadDebugData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const fbclidDaURL = urlParams.get('fbclid');
-            
-            // Atualiza localStorage se tiver fbclid na URL
-            if (fbclidDaURL) {
-                localStorage.setItem('ultimo_fbclid', fbclidDaURL);
-            }
-            
-            const currentFbclid = fbclidDaURL || localStorage.getItem('ultimo_fbclid') || 'Não capturado';
-
-            const debugData = {
-                fbclid: currentFbclid,
-                whatsapp_number: urlParams.get('whatsapp_number') || localStorage.getItem('client_whatsapp') || 'Não capturado',
-                value: 39.90,
-                currency: 'BRL',
-                offer_type: 'main',
-                debug_mode: debugMode,
-                timestamp: new Date().toISOString()
-            };
-
-            debugOutputEl.textContent = JSON.stringify(debugData, null, 2);
-            
-            // Envia para dataLayer (GA4/GTM)
-            window.dataLayer = window.dataLayer || [];
-            dataLayer.push({
-                event: 'purchase_completed',
-                client_data: debugData
-            });
-
-            // Dispara Facebook Pixel Purchase Event
-            fbq('track', 'Purchase', {
-                value: 39.90,
-                currency: 'BRL',
-                content_ids: ['main_offer'],
-                content_type: 'product',
-                fbclid: currentFbclid,
-                offer_type: 'main'
-            });
-
-            console.log('📢 Evento purchase_completed (main) disparado:', debugData);
-        }
-
-        // Inicialização
-        if(debugMode) {
-            redirectMessageEl.style.display = 'none';
-            debugStatusEl.textContent = "Modo Debug Ativo - Redirecionamento desabilitado";
-        } else {
+        // Funções de debug
+        function simularRedirecionamento() {
             startCountdown();
         }
 
-        // Carrega os dados iniciais
-        loadDebugData();
+        function limparLocalStorage() {
+            localStorage.removeItem('fbclid');
+            localStorage.removeItem('whatsapp');
+            debugStatusEl.textContent = "Dados locais limpos!";
+            setTimeout(() => { debugStatusEl.textContent = ""; }, 2000);
+        }
+
+        // Inicialização
+        fireTrackingEvents();
+        startCountdown();
     </script>
 </body>
 </html>
