@@ -111,19 +111,40 @@
             debugStatusEl.innerHTML = 'Modo Debug Ativo - Redirecionamento desativado';
         }
 
+        // Função para salvar parâmetros importantes
+        function saveUrlParameters() {
+            // Captura fbclid da URL e salva no localStorage
+            const fbclid = urlParams.get('fbclid');
+            if(fbclid) {
+                localStorage.setItem('fbclid', fbclid);
+            }
+            
+            // Captura whatsapp_number da URL e salva no localStorage
+            const whatsapp = urlParams.get('whatsapp_number') || urlParams.get('whatsapp');
+            if(whatsapp) {
+                localStorage.setItem('whatsapp_number', whatsapp);
+            }
+        }
+
         // Coleta dados da compra
         function getPurchaseData() {
-            const fbclid = urlParams.get('fbclid') || localStorage.getItem('fbclid') || '';
-            const whatsapp = urlParams.get('whatsapp') || localStorage.getItem('whatsapp') || '';
+            // Executa antes para garantir que os parâmetros estão salvos
+            saveUrlParameters();
+            
+            // Obtém os valores do localStorage ou da URL
+            const fbclid = localStorage.getItem('fbclid') || urlParams.get('fbclid') || '';
+            const whatsapp = localStorage.getItem('whatsapp_number') || 
+                           urlParams.get('whatsapp_number') || 
+                           urlParams.get('whatsapp') || '';
             
             return {
-                value: 39.90, // Valor principal alterado para R$39,90
+                value: 39.90,
                 currency: 'BRL',
-                content_ids: ['main_offer'], // ID da oferta principal
+                content_ids: ['main_offer'],
                 content_type: 'product',
                 fbclid: fbclid,
-                whatsapp: whatsapp,
-                offer_type: 'main', // Tipo de oferta principal
+                whatsapp_number: whatsapp,
+                offer_type: 'main',
                 timestamp: new Date().toISOString()
             };
         }
@@ -138,7 +159,8 @@
                 currency: purchaseData.currency,
                 content_ids: purchaseData.content_ids,
                 content_type: purchaseData.content_type,
-                fbclid: purchaseData.fbclid
+                fbclid: purchaseData.fbclid,
+                whatsapp_number: purchaseData.whatsapp_number
             });
             
             // DataLayer para GTM/GA4
@@ -155,12 +177,7 @@
                     ...purchaseData
                 }, null, 2);
                 
-                console.log('Facebook Pixel Purchase Event:', {
-                    value: purchaseData.value,
-                    currency: purchaseData.currency,
-                    content_ids: purchaseData.content_ids,
-                    fbclid: purchaseData.fbclid
-                });
+                console.log('Dados enviados:', purchaseData);
             }
         }
 
@@ -186,9 +203,10 @@
 
         function limparLocalStorage() {
             localStorage.removeItem('fbclid');
-            localStorage.removeItem('whatsapp');
+            localStorage.removeItem('whatsapp_number');
             debugStatusEl.textContent = "Dados locais limpos!";
             setTimeout(() => { debugStatusEl.textContent = ""; }, 2000);
+            fireTrackingEvents(); // Reenvia os eventos após limpeza
         }
 
         // Inicialização
